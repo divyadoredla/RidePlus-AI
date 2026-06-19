@@ -165,15 +165,13 @@ Developed a real-time analytics platform for ride-sharing events using NYC Taxi 
 
 **Tech Stack**: Python, Pandas, SQLite, Streamlit, Matplotlib, Seaborn
 
-## 📄 License
-
-MIT License
-
 ## 👤 Author
 
-Your Name - [GitHub](https://github.com/yourusername) | [LinkedIn](https://linkedin.com/in/yourprofile)
+Doredla Divya Sri - [GitHub](https://github.com/divyadoredla) | [LinkedIn](https://linkedin.com/in/divyadoredla24)
 
 ## 🙏 Acknowledgments
 
 - NYC Taxi & Limousine Commission for the dataset
 - Streamlit for the dashboard framework
+
+Created with ❤️ by Doredla Divya Sri @2026
