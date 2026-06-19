@@ -19,7 +19,12 @@ def load_data():
         except:
             pass
     
-    # Fallback to CSV
+    # Try sample CSV for Streamlit Cloud
+    sample_path = "data/ridepulse_sample.csv"
+    if os.path.exists(sample_path):
+        return pd.read_csv(sample_path)
+    
+    # Try full CSV
     csv_path = "data/ridepulse_processed.csv"
     if os.path.exists(csv_path):
         return pd.read_csv(csv_path).head(100000)

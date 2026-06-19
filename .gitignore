@@ -52,8 +52,10 @@ logs/
 
 # Data files (large datasets)
 data/*.parquet
-data/*.csv
+data/ridepulse_processed.csv
+data/cleaned_data.csv
 *.parquet
 
-# Keep structure but ignore large files
+# Keep sample data for Streamlit Cloud
+!data/ridepulse_sample.csv
 !data/.gitkeep
