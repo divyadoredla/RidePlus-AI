@@ -9,25 +9,32 @@ st.set_page_config(page_title="RidePulse Dashboard", page_icon="🚖", layout="w
 
 @st.cache_data
 def load_data():
-    # Try SQLite first, fallback to CSV
-    if os.path.exists("ridepulse.db"):
-        try:
-            conn = sqlite3.connect("ridepulse.db")
-            df = pd.read_sql("SELECT * FROM fact_trips LIMIT 100000", conn)
-            conn.close()
-            return df
-        except:
-            pass
+    # Determine base path (works both locally and on Streamlit Cloud)
+    base_paths = [".", ".."]
+    
+    # Try SQLite first
+    for base in base_paths:
+        db_path = os.path.join(base, "ridepulse.db")
+        if os.path.exists(db_path):
+            try:
+                conn = sqlite3.connect(db_path)
+                df = pd.read_sql("SELECT * FROM fact_trips LIMIT 100000", conn)
+                conn.close()
+                return df
+            except:
+                pass
     
     # Try sample CSV for Streamlit Cloud
-    sample_path = "data/ridepulse_sample.csv"
-    if os.path.exists(sample_path):
-        return pd.read_csv(sample_path)
+    for base in base_paths:
+        sample_path = os.path.join(base, "data", "ridepulse_sample.csv")
+        if os.path.exists(sample_path):
+            return pd.read_csv(sample_path)
     
     # Try full CSV
-    csv_path = "data/ridepulse_processed.csv"
-    if os.path.exists(csv_path):
-        return pd.read_csv(csv_path).head(100000)
+    for base in base_paths:
+        csv_path = os.path.join(base, "data", "ridepulse_processed.csv")
+        if os.path.exists(csv_path):
+            return pd.read_csv(csv_path).head(100000)
     
     # Generate sample data if nothing exists
     st.warning("⚠️ No data found. Using sample data for demo purposes.")
@@ -35,15 +42,20 @@ def load_data():
 
 @st.cache_data
 def load_kpi_hourly():
+    # Determine base path
+    base_paths = [".", ".."]
+    
     # Try SQLite first
-    if os.path.exists("ridepulse.db"):
-        try:
-            conn = sqlite3.connect("ridepulse.db")
-            df = pd.read_sql("SELECT * FROM kpi_hourly", conn)
-            conn.close()
-            return df
-        except:
-            pass
+    for base in base_paths:
+        db_path = os.path.join(base, "ridepulse.db")
+        if os.path.exists(db_path):
+            try:
+                conn = sqlite3.connect(db_path)
+                df = pd.read_sql("SELECT * FROM kpi_hourly", conn)
+                conn.close()
+                return df
+            except:
+                pass
     
     # Generate from CSV or sample data
     df = load_data()
@@ -59,15 +71,20 @@ def load_kpi_hourly():
 
 @st.cache_data
 def load_kpi_passenger():
+    # Determine base path
+    base_paths = [".", ".."]
+    
     # Try SQLite first
-    if os.path.exists("ridepulse.db"):
-        try:
-            conn = sqlite3.connect("ridepulse.db")
-            df = pd.read_sql("SELECT * FROM kpi_passenger", conn)
-            conn.close()
-            return df
-        except:
-            pass
+    for base in base_paths:
+        db_path = os.path.join(base, "ridepulse.db")
+        if os.path.exists(db_path):
+            try:
+                conn = sqlite3.connect(db_path)
+                df = pd.read_sql("SELECT * FROM kpi_passenger", conn)
+                conn.close()
+                return df
+            except:
+                pass
     
     # Generate from CSV or sample data
     df = load_data()
