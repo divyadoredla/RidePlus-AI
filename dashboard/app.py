@@ -202,3 +202,21 @@ filtered_df = df[(df["pickup_hour"] >= hour_filter[0]) &
 
 st.write(f"Showing {len(filtered_df):,} trips")
 st.dataframe(filtered_df.head(100), use_container_width=True)
+
+st.divider()
+
+# Footer
+st.markdown("---")
+st.markdown(
+    """
+    <div style='text-align: center; padding: 20px;'>
+        <p style='color: #666; font-size: 14px;'>
+            Created with ❤️ by <strong>Doredla Divya Sri</strong> @2026
+        </p>
+        <p style='color: #888; font-size: 12px;'>
+            RidePulse v1.0 | Data Engineering Portfolio Project
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

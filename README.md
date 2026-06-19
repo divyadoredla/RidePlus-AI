@@ -175,3 +175,11 @@ Doredla Divya Sri - [GitHub](https://github.com/divyadoredla) | [LinkedIn](https
 - Streamlit for the dashboard framework
 
 Created with ❤️ by Doredla Divya Sri @2026
+
+
+---
+
+<div align="center">
+  <p><strong>Created with ❤️ by Doredla Divya Sri @2026</strong></p>
+  <p>RidePulse v1.0 | Data Engineering Portfolio Project</p>
+</div>
