@@ -3,28 +3,93 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import sqlite3
+import os
 
 st.set_page_config(page_title="RidePulse Dashboard", page_icon="🚖", layout="wide")
 
 @st.cache_data
 def load_data():
-    conn = sqlite3.connect("ridepulse.db")
-    df = pd.read_sql("SELECT * FROM fact_trips LIMIT 100000", conn)
-    conn.close()
-    return df
+    # Try SQLite first, fallback to CSV
+    if os.path.exists("ridepulse.db"):
+        try:
+            conn = sqlite3.connect("ridepulse.db")
+            df = pd.read_sql("SELECT * FROM fact_trips LIMIT 100000", conn)
+            conn.close()
+            return df
+        except:
+            pass
+    
+    # Fallback to CSV
+    csv_path = "data/ridepulse_processed.csv"
+    if os.path.exists(csv_path):
+        return pd.read_csv(csv_path).head(100000)
+    
+    # Generate sample data if nothing exists
+    st.warning("⚠️ No data found. Using sample data for demo purposes.")
+    return generate_sample_data()
 
 @st.cache_data
 def load_kpi_hourly():
-    conn = sqlite3.connect("ridepulse.db")
-    df = pd.read_sql("SELECT * FROM kpi_hourly", conn)
-    conn.close()
-    return df
+    # Try SQLite first
+    if os.path.exists("ridepulse.db"):
+        try:
+            conn = sqlite3.connect("ridepulse.db")
+            df = pd.read_sql("SELECT * FROM kpi_hourly", conn)
+            conn.close()
+            return df
+        except:
+            pass
+    
+    # Generate from CSV or sample data
+    df = load_data()
+    kpi = df.groupby("pickup_hour").agg({
+        "total_amount": "sum",
+        "fare_amount": "mean",
+        "trip_distance": "mean",
+        "average_speed": "mean"
+    }).reset_index()
+    kpi.columns = ["pickup_hour", "total_revenue", "avg_fare", "avg_distance", "avg_speed"]
+    kpi["trip_count"] = df.groupby("pickup_hour").size().values
+    return kpi
 
 @st.cache_data
 def load_kpi_passenger():
-    conn = sqlite3.connect("ridepulse.db")
-    df = pd.read_sql("SELECT * FROM kpi_passenger", conn)
-    conn.close()
+    # Try SQLite first
+    if os.path.exists("ridepulse.db"):
+        try:
+            conn = sqlite3.connect("ridepulse.db")
+            df = pd.read_sql("SELECT * FROM kpi_passenger", conn)
+            conn.close()
+            return df
+        except:
+            pass
+    
+    # Generate from CSV or sample data
+    df = load_data()
+    kpi = df.groupby("passenger_count").agg({
+        "total_amount": "sum",
+        "fare_amount": "mean"
+    }).reset_index()
+    kpi.columns = ["passenger_count", "total_revenue", "avg_fare"]
+    kpi["trip_count"] = df.groupby("passenger_count").size().values
+    return kpi
+
+def generate_sample_data():
+    """Generate sample data for demo when real data is not available"""
+    import numpy as np
+    np.random.seed(42)
+    
+    n_samples = 10000
+    df = pd.DataFrame({
+        "VendorID": np.random.choice([1, 2], n_samples),
+        "tpep_pickup_datetime": pd.date_range("2025-01-01", periods=n_samples, freq="5min"),
+        "passenger_count": np.random.choice([1, 2, 3, 4, 5], n_samples, p=[0.7, 0.15, 0.08, 0.05, 0.02]),
+        "trip_distance": np.random.exponential(3, n_samples),
+        "fare_amount": np.random.exponential(15, n_samples) + 5,
+        "total_amount": np.random.exponential(18, n_samples) + 7,
+        "pickup_hour": np.random.randint(0, 24, n_samples),
+        "average_speed": np.random.normal(12, 3, n_samples).clip(5, 30)
+    })
     return df
 
 df = load_data()
