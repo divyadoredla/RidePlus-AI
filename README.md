@@ -2,9 +2,14 @@
 
 A production-grade data engineering project that simulates real-time analytics for ride-sharing platforms using NYC Yellow Taxi Trip data.
 
+🚀 **Live Demo**: [https://rideplus-ai.streamlit.app/](https://rideplus-ai.streamlit.app/)
+
 ## 📊 Project Overview
 
 RidePulse demonstrates end-to-end data engineering skills including data cleaning, feature engineering, streaming simulation, SQL database integration, and interactive visualization.
+
+**🌐 Live Dashboard**: [https://rideplus-ai.streamlit.app/](https://rideplus-ai.streamlit.app/)  
+**📁 GitHub Repository**: [https://github.com/divyadoredla/RidePlus-AI](https://github.com/divyadoredla/RidePlus-AI)
 
 ## ✨ Features
 
